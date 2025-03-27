@@ -7,7 +7,7 @@ Purpose:
     - To understand the range of historical data.
 
 MySQL Functions Used:
-    - MIN(), MAX(), DATEDIFF()
+    - MIN(), MAX(), TIMESTAMPDIFF()
 ===============================================================================
 */
 
@@ -20,11 +20,11 @@ SELECT
 FROM gold.fact_sales;
 
 -- Find the youngest and oldest customer based on birthdate
-SELECT
-   SELECT 
-	  MIN(birthdate) AS oldest,
+
+SELECT 
+    MIN(birthdate) AS oldest,
     MAX(birthdate) AS youngest,
-	  TIMESTAMPDIFF(year, MIN(birthdate), CURRENT_TIMESTAMP) AS oldest_age,
+    TIMESTAMPDIFF(year, MIN(birthdate), CURRENT_TIMESTAMP) AS oldest_age,
     TIMESTAMPDIFF(year, MAX(birthdate), CURRENT_TIMESTAMP) AS youngest_age
 FROM gold.dim_customers2;
 
