@@ -26,19 +26,19 @@ With sales_summary AS (
     -- ORDER BY DATE_FORMAT(order_date, '%Y-%m-01')) 
     
 SELECT 
-		order_month,
-    total_sales,
-    SUM(total_sales) OVER (ORDER BY order_month) AS running_total, -- cumulative values where the running total doesnt spill over the next year
-		running_avg 
+	order_month,
+    	total_sales,
+    	SUM(total_sales) OVER (ORDER BY order_month) AS running_total, -- cumulative values where the running total doesnt spill over the next year
+	running_avg 
 FROM sales_summary
 ;
 
 
 -- Running total by year
 SELECT 
-  total_sales, 
-  date, 
-  SUM(total_sales) OVER (ORDER BY date) as running_total
+  	total_sales, 
+  	date, 
+  	SUM(total_sales) OVER (ORDER BY date) as running_total
 FROM
 	(SELECT SUM(sales_amount) as total_sales, YEAR(order_date) as date
 	FROM fact_sales
@@ -51,9 +51,9 @@ FROM
 
 -- Running total by month
 SELECT 
-	  total_sales, 
-    month_date, 
-    SUM(total_sales) OVER (ORDER BY month_date) as running_total
+	total_sales, 
+    	month_date, 
+    	SUM(total_sales) OVER (ORDER BY month_date) as running_total
 FROM
 	(SELECT SUM(sales_amount) as total_sales, MONTH(order_date) as month_date
 	FROM fact_sales
