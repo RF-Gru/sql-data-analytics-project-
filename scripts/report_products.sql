@@ -30,19 +30,19 @@ WITH base_query AS (
 1) Base Query: Retrieves core columns from fact_sales and dim_products
 ---------------------------------------------------------------------------*/
   SELECT 
-		f.customer_key,
-		f.order_number,
-		f.order_date,
-		f.sales_amount,
-		f.quantity,
+	f.customer_key,
+	f.order_number,
+	f.order_date,
+	f.sales_amount,
+	f.quantity,
         p.product_key,
-		p.category,
-		p.subcategory,
-        p.product_name,
-		p.cost
-	FROM fact_sales AS f
-	JOIN dim_products AS p ON f.product_key = p.product_key
-    WHERE order_date IS NOT NULL  -- only consider valid sales dates
+	p.category,
+	p.subcategory,
+       	p.product_name,
+	p.cost
+FROM fact_sales AS f
+LEFT JOIN dim_products AS p ON f.product_key = p.product_key
+WHERE order_date IS NOT NULL  -- only consider valid sales dates
 ),
 
 product_aggregate AS (
@@ -51,27 +51,27 @@ product_aggregate AS (
 ---------------------------------------------------------------------------*/
 SELECT 
 		
-		product_key,
-		category,
-		subcategory,
-    product_name,
-		cost,
-    MAX(order_date) AS last_sale_date,
-    SUM(sales_amount) AS total_sales,
-		COUNT(DISTINCT order_number) AS total_orders,
-		SUM(quantity) AS total_quantity,
-    ROUND(AVG(sales_amount) / NULLIF (quantity,0)) AS avg_sell_price,
-		COUNT(DISTINCT customer_key) AS total_cust,
-		TIMESTAMPDIFF(Month, MIN(order_date), MAX(order_date)) AS lifespan,
-		TIMESTAMPDIFF(month, MAX(order_date), CURRENT_DATE()) AS recency_months      
-	FROM base_query 
-  GROUP BY
-    product_key,
-    product_name,
-    category,
-    subcategory,
-    cost,
-    quantity
+	product_key,
+	category,
+	subcategory,
+    	product_name,
+	cost,
+    	MAX(order_date) AS last_sale_date,
+    	SUM(sales_amount) AS total_sales,
+	COUNT(DISTINCT order_number) AS total_orders,
+	SUM(quantity) AS total_quantity,
+    	ROUND(AVG(sales_amount) / NULLIF (quantity,0)) AS avg_sell_price,
+	COUNT(DISTINCT customer_key) AS total_cust,
+	TIMESTAMPDIFF(Month, MIN(order_date), MAX(order_date)) AS lifespan,
+	TIMESTAMPDIFF(month, MAX(order_date), CURRENT_DATE()) AS recency_months      
+FROM base_query 
+GROUP BY
+	product_key,
+    	product_name,
+    	category,
+    	subcategory,
+    	cost,
+    	quantity
 )
 
 /*---------------------------------------------------------------------------
@@ -83,11 +83,11 @@ SELECT
 	category,
 	subcategory,
 	cost,
-  last_sale_date,
-  total_sales,
+  	last_sale_date,
+  	total_sales,
 	total_orders,
 	total_quantity,
-  avg_sell_price,
+  	avg_sell_price,
 	total_cust,
 	lifespan,
 	recency_months,
